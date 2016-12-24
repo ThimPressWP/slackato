@@ -5,6 +5,8 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 
+require('./app.databases');
+
 app.use(express.static(__dirname + '/public'));
 
 let oathCtrl = require('./controllers/oauth');
