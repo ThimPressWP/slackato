@@ -5,11 +5,9 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 
-let oathCtrl = require('./controllers/oauth');
+app.use(express.static(__dirname + '/public'));
 
-app.get('/', (req, res, next) => {
-    res.send('Hello');
-});
+let oathCtrl = require('./controllers/oauth');
 
 app.get('/oauth', oathCtrl.callback);
 
