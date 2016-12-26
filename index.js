@@ -5,8 +5,14 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 
+const bodyParser = require('body-parser');
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({extended: true}));
+
 let oathCtrl = require('./controllers/oauth');
+let commandCtrl = require('./controllers/command');
 app.get('/oauth', oathCtrl.callback);
+app.post('/command', commandCtrl.handleCommand);
 
 const database = require('./app.databases');
 database()
