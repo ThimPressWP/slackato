@@ -15,6 +15,7 @@ const database = require('./mongoose.js');
 database()
     .then(
         (message) => {
+            console.log(message);
             initServer();
         },
         error => {
