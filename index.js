@@ -6,29 +6,27 @@ const express = require('express');
 const app = express();
 
 const bodyParser = require('body-parser');
-app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-let oathCtrl = require('./controllers/oauth');
-let commandCtrl = require('./controllers/command');
-app.get('/oauth', oathCtrl.callback);
-app.post('/command', commandCtrl.handleCommand);
+app.use(express.static(__dirname + '/public'));
 
-const database = require('./app.databases');
+const database = require('./mongoose.js');
 database()
     .then(
-        () => {
-            console.log('Database connected');
-            listen();
+        (message) => {
+            initServer();
         },
         error => {
             console.log(error);
         }
     );
 
-app.use(express.static(__dirname + '/public'));
 
-function listen() {
+function initServer() {
+    let routes = require('./routes');
+    app.use(routes);
+
     let port = process.env.HOST_PORT || 7878;
     app.listen(port, () => {
         console.log('App listening on port ' + port);
