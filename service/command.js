@@ -34,6 +34,8 @@ function parseCommandText(text) {
 function verify(teamID, code) {
     let deferred = q.defer();
 
+    console.log('Verify purchase code:', code);
+
     Team.findOne({
         team_id: teamID
     })
@@ -46,6 +48,8 @@ function verify(teamID, code) {
                 if (!team.envato_token) {
                     deferred.reject('Please oauth envato');
                 }
+
+                console.log('Team exist');
 
                 envatoSrv.getSaleByCode(code, team.envato_token)
                     .then(

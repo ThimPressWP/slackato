@@ -41,6 +41,8 @@ function getAccessToken(refresh_token) {
 function requestApi(args, access_token, refresh_token) {
     let deferred = q.defer();
 
+    console.log('Request api', args.url, access_token);
+
     request({
         url: args.url,
         method: args.method || 'GET',
@@ -53,7 +55,7 @@ function requestApi(args, access_token, refresh_token) {
             let object = JSON.parse(body);
 
             if (object.error == 'forbidden') {
-                getAccessToken(refresh_token)
+                return getAccessToken(refresh_token)
                     .then(
                         token => {
                             return requestApi(args, token, refresh_token);
@@ -120,6 +122,8 @@ module.exports.getToken = (code) => {
 module.exports.getSaleByCode = (code, token) => {
     let deferred = q.defer();
 
+    console.log('Get sale by code:', code, token);
+
     let access_token = token.access_token;
     let refresh_token = token.refresh_token;
 
@@ -132,6 +136,8 @@ module.exports.getSaleByCode = (code, token) => {
     )
         .then(
             response => {
+                console.log(response);
+
                 deferred.resolve({
                     name: response.item.name,
                     url: response.item.url,

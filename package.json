@@ -19,6 +19,7 @@
     "mongoose": "^4.7.4",
     "q": "^1.4.1",
     "request": "^2.79.0",
+    "request-promise": "^4.1.1",
     "slack-api": "^0.1.12"
   }
 }
