@@ -1,9 +1,22 @@
 'use strict';
 
 require('dotenv').config();
+require('./helpers');
 
 const express = require('express');
 const app = express();
+const session = require('express-session');
+
+app.set('trust proxy', 1);
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: true,
+        maxAge: 60000
+    }
+}));
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());

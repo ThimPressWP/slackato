@@ -15,10 +15,13 @@ module.exports.callback = function (req, res, next) {
     slackSrv.getToken(code)
         .then(
             response => {
+                console.log(response);
                 let newChanel = new Chanel(response);
                 newChanel.save()
                     .then(
-                        chanel => res.redirect('/')
+                        chanel => {
+                            res.redirect(`/envato-auth/${chanel.team_id}`);
+                        }
                     )
                     .catch(
                         error => {
