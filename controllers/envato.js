@@ -21,6 +21,12 @@ module.exports.redirectAuth = (req, res) => {
 };
 
 module.exports.handleCallback = (req, res) => {
+    let error = req.query.error || false;
+    if (error) {
+        let message = req.query.error_description || 'Access denied';
+        return res.send(message);
+    }
+
     let code = req.query.code || false;
 
     if (!code) {
