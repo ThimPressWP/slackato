@@ -4,7 +4,7 @@ const commandSrv = require('../service/command');
 const messageSrv = require('../service/slack.message');
 
 
-module.exports.handleCommand = function (req, res, next) {
+module.exports.handleCommand = function (req, res) {
     let postData = req.body;
 
     commandSrv.handle(postData)
@@ -14,13 +14,12 @@ module.exports.handleCommand = function (req, res, next) {
                     return res.json(messageSrv.verifySuccess(result));
                 }
 
-                res.json(messageSrv.error(result));
+                res.send(result);
             }
         )
         .catch(
             error => {
-                console.log(error);
-                res.send(error);
+                res.json(messageSrv.error(error));
             }
         );
 };

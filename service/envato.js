@@ -145,7 +145,6 @@ module.exports.getSaleByCode = (code, token) => {
         )
         .catch(
             error => {
-                console.log(error);
                 deferred.reject(error);
             }
         );
