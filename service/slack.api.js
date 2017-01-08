@@ -30,7 +30,6 @@ module.exports.getToken = function (code) {
         } catch (e) {
             deferred.reject('Parse json error!');
         }
-
     });
 
     return deferred.promise;

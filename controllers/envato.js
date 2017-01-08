@@ -1,6 +1,8 @@
 'use strict';
 
 const envatoSrv = require('../service/envato');
+const Mongoose = require('mongoose');
+const Team = Mongoose.model('Team');
 
 module.exports.redirectAuth = (req, res) => {
     let teamID = req.params.teamID || false;
@@ -19,9 +21,7 @@ module.exports.redirectAuth = (req, res) => {
 };
 
 module.exports.handleCallback = (req, res) => {
-    let code = req.params.code || false;
-
-    console.log(req.params);
+    let code = req.query.code || false;
 
     if (!code) {
         return res.redirect('/error.html');
@@ -29,12 +29,20 @@ module.exports.handleCallback = (req, res) => {
 
     envatoSrv.getToken(code)
         .then(
-            test => {
-                res.json(test);
+            token => {
+                let teamID = req.session.teamID;
+
+                return Team.saveEnvatoTokenByTeamID(teamID, token);
+            }
+        )
+        .then(
+            message => {
+                res.redirect('/done.html');
             }
         )
         .catch(
             error => {
+                console.error(error);
                 res.redirect('/error.html');
             }
         );

@@ -20,7 +20,7 @@ module.exports.callback = function (req, res, next) {
                 newTeam.save()
                     .then(
                         team => {
-                            res.redirect(`/envato-auth/${team.team_id}`);
+                            res.redirect(`/envato-oauth/${team.team_id}`);
                         }
                     )
                     .catch(

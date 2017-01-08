@@ -23,25 +23,26 @@ module.exports.getToken = (code) => {
         code
     };
 
-    console.log(data);
+    request.post(url, {form: data}, (error, response, body) => {
+        if (error) {
+            deferred.reject(error);
+        }
 
-    request.post(url)
-        .form(data)
-        .then(
-            (a, b, c) => {
-                console.log(a);
-                console.log(b);
-                console.log(c);
+        try {
+            let object = JSON.parse(body);
 
-                deferred.resolve(true);
+            if (object.error) {
+                deferred.resolve(object.error_description);
             }
-        )
-        .catch(
-            error => {
-                console.log(error);
-                deferred.reject(error);
-            }
-        );
+
+            delete object.token_type;
+            delete object.expires_in;
+
+            deferred.resolve(object);
+        } catch (e) {
+            deferred.reject('Parse json error!');
+        }
+    });
 
     return deferred.promise;
 };

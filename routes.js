@@ -11,5 +11,5 @@ module.exports = router
     .get('/oauth', oathCtrl.callback)
     .post('/command', commandCtrl.handleCommand)
 
-    .get('/envato-auth/:teamID', envatoCtrl.redirectAuth)
+    .get('/envato-oauth/:teamID', envatoCtrl.redirectAuth)
     .get('/envato', envatoCtrl.handleCallback);
