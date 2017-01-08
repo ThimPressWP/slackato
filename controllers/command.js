@@ -14,7 +14,7 @@ module.exports.handleCommand = function (req, res) {
                     return res.json(messageSrv.verifySuccess(result));
                 }
 
-                res.send(result);
+                res.json(messageSrv.info(result));
             }
         )
         .catch(

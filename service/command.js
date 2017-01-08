@@ -75,6 +75,15 @@ function verify(teamID, code) {
     return deferred.promise;
 }
 
+function help() {
+    let deferred = q.defer();
+
+    deferred.resolve("*Guidelines*\n" +
+        "- Verify purchase code:\n`/slackato verify purchase-code-abc-xyz`");
+
+    return deferred.promise;
+}
+
 module.exports.handle = (postData) => {
     let deferred = q.defer();
 
@@ -88,12 +97,16 @@ module.exports.handle = (postData) => {
 
     let parsing = parseCommandText(commandText);
     if (!parsing) {
-        deferred.reject('Type `/slackato help` to see detail commands');
+        deferred.reject("Hi! I am *Slackato* :)\nType `/slackato help` to see detail commands");
     }
 
     switch (parsing.name) {
         case 'verify':
             return verify(teamID, parsing.value);
+            break;
+
+        case 'help':
+            return help();
             break;
 
         default:

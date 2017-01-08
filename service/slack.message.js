@@ -45,3 +45,17 @@ module.exports.error = (text) => {
         ]
     };
 };
+
+module.exports.info = (text) => {
+    return {
+        'text': text,
+        "attachments": [
+            {
+                "color": "#9e9e9e",
+                "footer": "<http://slackato.com|Slackato>",
+                "footer_icon": "https://a41e2ef2.ngrok.io/assets/images/logo.png",
+                "ts": (new Date()).getTime()
+            }
+        ]
+    };
+};
