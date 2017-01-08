@@ -12,7 +12,7 @@ module.exports.verifySuccess = (item) => {
                 "fields": [
                     {
                         "title": "Buyer",
-                        "value": item.buyer,
+                        "value": `<https://themeforest.net/user/${item.buyer}|${item.buyer}>`,
                     },
                     {
                         "title": "Licence",
