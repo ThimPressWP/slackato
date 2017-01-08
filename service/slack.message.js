@@ -23,7 +23,7 @@ module.exports.verifySuccess = (item) => {
                         "value": item.supported_until,
                     }
                 ],
-                "footer": "Slackato",
+                "footer": "<http://slackato.com|Slackato>",
                 "footer_icon": "https://a41e2ef2.ngrok.io/assets/images/logo.png",
                 "ts": (new Date()).getTime()
             }
@@ -34,11 +34,11 @@ module.exports.verifySuccess = (item) => {
 module.exports.error = (text) => {
     return {
         response_type: 'in_channel',
+        'text': text,
         "attachments": [
             {
                 "color": "#ff9800",
-                "text": text,
-                "footer": "Slackato",
+                "footer": "<http://slackato.com|Slackato>",
                 "footer_icon": "https://a41e2ef2.ngrok.io/assets/images/logo.png",
                 "ts": (new Date()).getTime()
             }
