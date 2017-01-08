@@ -34,10 +34,9 @@ function parseCommandText(text) {
 function verify(teamID, code) {
     let deferred = q.defer();
 
-    Team
-        .findOne({
-            team_id: teamID
-        })
+    Team.findOne({
+        team_id: teamID
+    })
         .then(
             team => {
                 if (!team) {
@@ -48,7 +47,17 @@ function verify(teamID, code) {
                     deferred.reject('Please oauth envato');
                 }
 
-                return envatoSrv.getSaleByCode(code, team.envato_token);
+                envatoSrv.getSaleByCode(code, team.envato_token)
+                    .then(
+                        result => {
+                            deferred.resolve(result);
+                        }
+                    )
+                    .catch(
+                        error => {
+                            deferred.reject(error);
+                        }
+                    );
             }
         )
         .catch(

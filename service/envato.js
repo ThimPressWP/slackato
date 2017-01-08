@@ -138,6 +138,7 @@ module.exports.getSaleByCode = (code, token) => {
                     license: response.license,
                     supported_until: response.supported_until,
                     buyer: response.buyer,
+                    purchase_code: code,
                     purchase_count: response.purchase_count
                 });
             }
