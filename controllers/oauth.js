@@ -2,7 +2,7 @@
 
 let slackSrv = require('../service/slack.api');
 const Mongoose = require('mongoose');
-const Chanel = Mongoose.model('Chanel');
+const Team = Mongoose.model('Team');
 
 module.exports.callback = function (req, res, next) {
     let error = req.query.error || false;
@@ -16,11 +16,11 @@ module.exports.callback = function (req, res, next) {
         .then(
             response => {
                 console.log(response);
-                let newChanel = new Chanel(response);
-                newChanel.save()
+                let newTeam = new Team(response);
+                newTeam.save()
                     .then(
-                        chanel => {
-                            res.redirect(`/envato-auth/${chanel.team_id}`);
+                        team => {
+                            res.redirect(`/envato-auth/${team.team_id}`);
                         }
                     )
                     .catch(
@@ -30,6 +30,7 @@ module.exports.callback = function (req, res, next) {
                     );
             },
             error => {
+                console.error(error);
                 res.redirect('/error.html');
             }
         );
