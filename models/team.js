@@ -41,7 +41,7 @@ Team.pre('save', function (next) {
 
 Team.post('save', function (error, doc, next) {
     if (error.name === 'MongoError' && error.code === 11000) {
-        next('Team has already integrated :)');
+        next(doc);
     } else {
         next();
     }

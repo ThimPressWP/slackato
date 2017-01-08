@@ -25,6 +25,10 @@ module.exports.callback = function (req, res, next) {
                     )
                     .catch(
                         error => {
+                            if (error.team_id) {
+                                return res.redirect(`/envato-oauth/${error.team_id}`);
+                            }
+
                             res.send(error);
                         }
                     );
