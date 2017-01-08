@@ -28,10 +28,7 @@ let Team = new Schema({
     },
     envato_token: {
         type: Schema.Types.Mixed,
-        default: {
-            access_token: false,
-            refresh_token: false
-        }
+        default: false
     }
 });
 

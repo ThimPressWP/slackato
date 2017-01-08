@@ -1,11 +1,19 @@
 'use strict';
 
-module.exports.handleCommand = function (req, res, next) {
-    let post_data = req.body;
-    let command_text = post_data.text || '';
-    command_text = command_text.trim();
+const commandSrv = require('../service/command');
 
-    res.json({
-        text: command_text
-    });
+module.exports.handleCommand = function (req, res, next) {
+    let postData = req.body;
+
+    commandSrv.handle(postData)
+        .then(
+            response => {
+                res.json(response);
+            }
+        )
+        .catch(
+            error => {
+                res.send(error);
+            }
+        );
 };
