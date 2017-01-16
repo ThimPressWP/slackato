@@ -1,14 +1,13 @@
 'use strict';
 
 const request = require('request');
-const q = require('q');
 
 let client_id = process.env.ENVATO_APP_ID;
 let client_key = process.env.ENVATO_APP_KEY;
 let redirect = process.env.HOST + '/envato';
 
 function getAccessToken(refresh_token) {
-    let deferred = q.defer();
+    let deferred = Promise.defer();
 
     let data = {
         grant_type: 'refresh_token',
@@ -39,7 +38,7 @@ function getAccessToken(refresh_token) {
 }
 
 function requestApi(args, access_token, refresh_token) {
-    let deferred = q.defer();
+    let deferred = Promise.defer();
 
     console.log('Request api', args.url, access_token);
 
@@ -84,7 +83,7 @@ module.exports.getUrlAuth = () => {
 };
 
 module.exports.getToken = (code) => {
-    let deferred = q.defer();
+    let deferred = Promise.defer();
 
     let url = 'https://api.envato.com/token';
 
@@ -120,7 +119,7 @@ module.exports.getToken = (code) => {
 };
 
 module.exports.getSaleByCode = (code, token) => {
-    let deferred = q.defer();
+    let deferred = Promise.defer();
 
     console.log('Get sale by code:', code, token);
 
@@ -136,8 +135,6 @@ module.exports.getSaleByCode = (code, token) => {
     )
         .then(
             response => {
-                console.log(response);
-
                 deferred.resolve({
                     name: response.item.name,
                     url: response.item.url,

@@ -32,7 +32,7 @@ function parseCommandText(text) {
 }
 
 function verify(teamID, code) {
-    let deferred = q.defer();
+    let deferred = Promise.defer();
 
     console.log('Verify purchase code:', code);
 
@@ -51,17 +51,12 @@ function verify(teamID, code) {
 
                 console.log('Team exist');
 
-                envatoSrv.getSaleByCode(code, team.envato_token)
-                    .then(
-                        result => {
-                            deferred.resolve(result);
-                        }
-                    )
-                    .catch(
-                        error => {
-                            deferred.reject(error);
-                        }
-                    );
+                return envatoSrv.getSaleByCode(code, team.envato_token);
+            }
+        )
+        .then(
+            result => {
+                deferred.resolve(result);
             }
         )
         .catch(
@@ -76,7 +71,7 @@ function verify(teamID, code) {
 }
 
 function help() {
-    let deferred = q.defer();
+    let deferred = Promise.defer();
 
     deferred.resolve("*Guidelines*\n" +
         "- Verify purchase code:\n`/slackato verify purchase-code-abc-xyz`");
@@ -85,7 +80,7 @@ function help() {
 }
 
 module.exports.handle = (postData) => {
-    let deferred = q.defer();
+    let deferred = Promise.defer();
 
     let teamID = postData.team_id || false;
     if (!teamID) {
