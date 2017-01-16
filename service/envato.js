@@ -121,18 +121,14 @@ module.exports.getToken = (code) => {
 module.exports.getSaleByCode = (code, token) => {
     let deferred = Promise.defer();
 
-    console.log('Get sale by code:', code, token);
+    console.log(`Get sale by code: ${code} with token ${token}`);
 
     let access_token = token.access_token;
     let refresh_token = token.refresh_token;
 
-    requestApi(
-        {
-            url: `https://api.envato.com/v3/market/author/sale?code=${code}`
-        },
-        access_token,
-        refresh_token
-    )
+    requestApi({
+        url: `https://api.envato.com/v3/market/author/sale?code=${code}`
+    }, access_token, refresh_token)
         .then(
             response => {
                 deferred.resolve({
