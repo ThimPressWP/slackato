@@ -6,6 +6,33 @@ let client_id = process.env.ENVATO_APP_ID;
 let client_key = process.env.ENVATO_APP_KEY;
 let redirect = process.env.HOST + '/envato';
 
+function _request(args, access_token) {
+    let deferred = Promise.defer();
+
+    request({
+        url: args.url,
+        method: args.method || 'GET',
+        form: args.data,
+        headers: {
+            "Authorization": `Bearer ${access_token}`
+        }
+    }, (error, response, body) => {
+        if (error) {
+            return deferred.reject(error.message);
+        }
+
+        try {
+            let object = JSON.parse(body);
+
+            return deferred.resolve(object);
+        } catch (e) {
+            deferred.reject('Parse json error!');
+        }
+    });
+
+    return deferred.promise;
+}
+
 function getAccessToken(refresh_token) {
     let deferred = Promise.defer();
 
@@ -18,17 +45,17 @@ function getAccessToken(refresh_token) {
 
     request.post('https://api.envato.com/token', {form: data}, (error, response, body) => {
         if (error) {
-            deferred.reject(error);
+            return deferred.reject(error);
         }
 
         try {
             let object = JSON.parse(body);
 
             if (object.error) {
-                deferred.reject(object.error_description);
+                return deferred.reject(object.error_description);
             }
 
-            deferred.resolve(object.access_token);
+            return deferred.resolve(object.access_token);
         } catch (e) {
             deferred.reject('Parse json error!');
         }
@@ -37,43 +64,28 @@ function getAccessToken(refresh_token) {
     return deferred.promise;
 }
 
-function requestApi(args, access_token, refresh_token) {
-    let deferred = Promise.defer();
-
+function requestApi(args, access_token) {
     console.log('Request api', args.url, access_token);
 
-    request({
-        url: args.url,
-        method: args.method || 'GET',
-        form: args.data,
-        headers: {
-            "Authorization": `Bearer ${access_token}`
-        }
-    }, (error, response, body) => {
-        try {
-            let object = JSON.parse(body);
+    let deferred = Promise.defer();
 
-            if (object.error == 'forbidden') {
-                return getAccessToken(refresh_token)
-                    .then(
-                        token => {
-                            return requestApi(args, token, refresh_token);
-                        }
-                    )
-                    .catch(
-                        error => {
-                            deferred.reject(error);
-                        }
-                    );
-            } else if (object.error) {
-                deferred.reject(object.description);
-            } else {
-                deferred.resolve(object);
+    _request(args, access_token)
+        .then(
+            function (response) {
+                if (response.item) {
+                    return deferred.resolve(response);
+                }
+
+                return Promise.reject(response.error_description);
             }
-        } catch (e) {
-            deferred.reject('PARSE_JSON_FAILED');
-        }
-    });
+        )
+        .catch(
+            message => {
+                console.log(`Error `, message);
+
+                deferred.reject(message);
+            }
+        );
 
     return deferred.promise;
 }
@@ -121,7 +133,7 @@ module.exports.getToken = (code) => {
 module.exports.getSaleByCode = (code, token) => {
     let deferred = Promise.defer();
 
-    console.log(`Get sale by code: ${code} with token ${token}`);
+    console.log(`Get sale by code: ${code} with token\n`, token);
 
     let access_token = token.access_token;
     let refresh_token = token.refresh_token;
@@ -131,6 +143,8 @@ module.exports.getSaleByCode = (code, token) => {
     }, access_token, refresh_token)
         .then(
             response => {
+                console.log('Exist-----------------------------');
+
                 deferred.resolve({
                     name: response.item.name,
                     url: response.item.url,

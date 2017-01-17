@@ -61,7 +61,7 @@ function verify(teamID, code) {
         )
         .catch(
             error => {
-                console.log(error);
+                console.log('Get sale failed ', error);
 
                 deferred.reject(error);
             }
