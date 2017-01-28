@@ -9,7 +9,7 @@ const session = require('express-session');
 
 app.set('trust proxy', 1);
 app.use(session({
-    secret: 'keyboard cat',
+    secret: 'hello',
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -30,7 +30,9 @@ database()
         (message) => {
             console.log(message);
             initServer();
-        },
+        }
+    )
+    .catch(
         error => {
             console.log(error);
         }
