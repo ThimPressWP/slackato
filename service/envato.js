@@ -64,8 +64,8 @@ function getAccessToken(refresh_token) {
     return deferred.promise;
 }
 
-function requestApi(args, access_token) {
-    console.log('Request api', args.url, access_token);
+function requestApi(args, access_token, refresh_token) {
+    console.log('Request api', args.url, access_token, refresh_token);
 
     let deferred = Promise.defer();
 
@@ -73,17 +73,31 @@ function requestApi(args, access_token) {
         .then(
             function (response) {
                 if (response.item) {
-                    return deferred.resolve(response);
+                    return Promise.resolve(response);
+                }
+
+                if (response.error && response.error == 'forbidden') {
+                    return getAccessToken(refresh_token)
+                        .then(
+                            access_token => {
+                                console.log(`New access token ${access_token}`);
+
+                                return _request(args, access_token, refresh_token);
+                            }
+                        );
                 }
 
                 return Promise.reject(response.error_description);
             }
         )
+        .then(
+            response => {
+                return deferred.resolve(response);
+            }
+        )
         .catch(
             message => {
-                console.log(`Error `, message);
-
-                deferred.reject(message);
+                return deferred.reject(message);
             }
         );
 
@@ -145,7 +159,7 @@ module.exports.getSaleByCode = (code, token) => {
             response => {
                 console.log('Exist-----------------------------');
 
-                deferred.resolve({
+                return deferred.resolve({
                     name: response.item.name,
                     url: response.item.url,
                     license: response.license,
@@ -158,6 +172,8 @@ module.exports.getSaleByCode = (code, token) => {
         )
         .catch(
             error => {
+                console.log('No error');
+
                 deferred.reject(error);
             }
         );
