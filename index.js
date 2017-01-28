@@ -1,19 +1,48 @@
 'use strict';
 
 require('dotenv').config();
+require('./helpers');
 
 const express = require('express');
 const app = express();
+const session = require('express-session');
 
-let oathCtrl = require('./controllers/oauth');
+app.set('trust proxy', 1);
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: true,
+        maxAge: 60000
+    }
+}));
 
-app.get('/', (req, res, next) => {
-    res.send('Hello');
-});
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
-app.get('/oauth', oathCtrl.callback);
+app.use(express.static(__dirname + '/public'));
 
-let port = process.env.HOST_PORT || 7878;
-app.listen(port, () => {
-    console.log('App listening on port ' + port);
-});
+const database = require('./mongoose.js');
+database()
+    .then(
+        (message) => {
+            console.log(message);
+            initServer();
+        },
+        error => {
+            console.log(error);
+        }
+    );
+
+
+function initServer() {
+    let routes = require('./routes');
+    app.use(routes);
+
+    let port = process.env.HOST_PORT || 7878;
+    app.listen(port, () => {
+        console.log('App listening on port ' + port);
+    });
+}
