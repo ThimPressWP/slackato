@@ -2,7 +2,6 @@
 
 const Mongoose = require('mongoose');
 const Schema = Mongoose.Schema;
-const q = require('q');
 
 let Team = new Schema({
     access_token: {
@@ -45,7 +44,7 @@ Team.post('save', function (error, doc, next) {
 });
 
 Team.statics.saveEnvatoTokenByTeamID = function (teamID, token) {
-    let deferred = q.defer();
+    let deferred = Promise.defer();
 
     this.model('Team').findOneAndUpdate({team_id: teamID}, {$set: {envato_token: token}}, (error, old) => {
         if (error) {

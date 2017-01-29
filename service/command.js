@@ -1,35 +1,9 @@
 'use strict';
 
-const q = require('q');
-
-const command = global.helpers.command;
+const commandHelper = global.helpers.command;
 const envatoSrv = require('./envato');
 const Mongoose = require('mongoose');
 const Team = Mongoose.model('Team');
-
-function parseCommandText(text) {
-    text = text.trim();
-
-    if (!text) {
-        return false;
-    }
-
-    let regex = /^\w+\s*/g;
-
-    let matches = text.match(regex);
-    if (!matches || !matches.length) {
-        return false;
-    }
-
-    let name = matches[0];
-    name = name.trim();
-    let value = text.replace(regex, '');
-
-    return {
-        name,
-        value
-    }
-}
 
 function verify(teamID, code) {
     let deferred = Promise.defer();
@@ -90,7 +64,7 @@ module.exports.handle = (postData) => {
     let commandText = postData.text || '';
     commandText = commandText.trim();
 
-    let parsing = parseCommandText(commandText);
+    let parsing = commandHelper.parseCommandText(commandText);
     if (!parsing) {
         deferred.reject("Hi! I am *Slackato* :)\nType `/slackato help` to see detail commands");
     }

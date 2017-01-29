@@ -157,7 +157,7 @@ module.exports.getSaleByCode = (code, token) => {
     }, access_token, refresh_token)
         .then(
             response => {
-                console.log('Exist-----------------------------');
+                console.info('Purchase code exist');
 
                 return deferred.resolve({
                     name: response.item.name,
@@ -172,8 +172,6 @@ module.exports.getSaleByCode = (code, token) => {
         )
         .catch(
             error => {
-                console.log('No error');
-
                 deferred.reject(error);
             }
         );
