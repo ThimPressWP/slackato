@@ -17,12 +17,12 @@ module.exports.verifySuccess = (item) => {
                         "value": `<https://themeforest.net/user/${item.buyer}|${item.buyer}>`,
                     },
                     {
-                        "title": "Licence",
-                        "value": item.license,
-                    },
-                    {
                         "title": "Remaining time",
                         "value": timeHelper.remainingTime(item.supported_until),
+                    },
+                    {
+                        "title": "Licence",
+                        "value": item.license,
                     }
                 ],
                 "footer": "<http://slackato.com|Slackato>",

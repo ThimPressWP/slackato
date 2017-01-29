@@ -79,10 +79,10 @@ function requestApi(args, access_token, refresh_token) {
                 if (response.error && response.error == 'forbidden') {
                     return getAccessToken(refresh_token)
                         .then(
-                            access_token => {
-                                console.log(`New access token ${access_token}`);
+                            new_access_token => {
+                                console.log(`New access token ${new_access_token}`);
 
-                                return _request(args, access_token, refresh_token);
+                                return _request(args, new_access_token);
                             }
                         );
                 }
