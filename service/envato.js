@@ -92,6 +92,10 @@ function requestApi(args, access_token, refresh_token) {
         )
         .then(
             response => {
+                if (response.error) {
+                    return deferred.reject(response.description);
+                }
+
                 return deferred.resolve(response);
             }
         )

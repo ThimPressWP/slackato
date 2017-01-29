@@ -51,14 +51,21 @@ module.exports.handleCommand = function (req, res) {
     }
 
     let postData = req.body;
+    let teamID = postData.team_id || false;
+    if (!teamID) {
+        return;
+    }
     let response_url = postData.response_url || false;
 
-    commandSrv.handle(postData)
+    commandSrv.handle(teamID, req.command)
         .then(
             result => {
-                let post = messageSrv.verifySuccess(result);
+                return hookSrv.send(response_url, result);
+            },
+            error => {
+                let data =  messageSrv.error(error);
 
-                return hookSrv.send(response_url, post);
+                return hookSrv.send(response_url, data);
             }
         )
         .then(
@@ -68,7 +75,7 @@ module.exports.handleCommand = function (req, res) {
         )
         .catch(
             error => {
-                console.error(error);
+                console.log(error);
             }
         );
 };

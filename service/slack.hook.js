@@ -4,10 +4,9 @@ const request = require('request');
 
 module.exports.send = function (url, data) {
     let deferred = Promise.defer();
-
-    console.log(`Send to hook: ${url}`);
-
     data = JSON.stringify(data);
+
+    console.log(`Send to hook: ${url}\n`, data);
 
     request.post(url, {form: data}, (error, response, body) => {
         if (error) {

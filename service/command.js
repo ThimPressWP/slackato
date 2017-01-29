@@ -1,9 +1,9 @@
 'use strict';
 
-const commandHelper = global.helpers.command;
 const envatoSrv = require('./envato');
 const Mongoose = require('mongoose');
 const Team = Mongoose.model('Team');
+const messageSrv = require('../service/slack.message');
 
 function verify(teamID, code) {
     let deferred = Promise.defer();
@@ -16,11 +16,11 @@ function verify(teamID, code) {
         .then(
             team => {
                 if (!team) {
-                    deferred.reject('Team not found');
+                    return Promise.reject('Team not found');
                 }
 
                 if (!team.envato_token) {
-                    deferred.reject('Please oauth envato');
+                    return Promise.reject('Please oauth envato');
                 }
 
                 console.log('Team exist');
@@ -30,14 +30,16 @@ function verify(teamID, code) {
         )
         .then(
             result => {
-                deferred.resolve(result);
+                let post = messageSrv.verifySuccess(result);
+
+                return deferred.resolve(post);
             }
         )
         .catch(
             error => {
                 console.log('Get sale failed ', error);
 
-                deferred.reject(error);
+                return deferred.reject(error);
             }
         );
 
@@ -53,25 +55,12 @@ function help() {
     return deferred.promise;
 }
 
-module.exports.handle = (postData) => {
+module.exports.handle = (teamID, command) => {
     let deferred = Promise.defer();
 
-    let teamID = postData.team_id || false;
-    if (!teamID) {
-        return deferred.reject('Something went wrong');
-    }
-
-    let commandText = postData.text || '';
-    commandText = commandText.trim();
-
-    let parsing = commandHelper.parseCommandText(commandText);
-    if (!parsing) {
-        deferred.reject("Hi! I am *Slackato* :)\nType `/slackato help` to see detail commands");
-    }
-
-    switch (parsing.name) {
+    switch (command.name) {
         case 'verify':
-            return verify(teamID, parsing.value);
+            return verify(teamID, command.value);
             break;
 
         default:

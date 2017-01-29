@@ -21,7 +21,7 @@ time.remainingTime = (expirationTime) => {
 time.getNowTimestamp = () => {
     let now = new Date();
 
-    return now.getTime() / 1000;
+    return parseInt(now.getTime() / 1000);
 };
 
 global.helpers.time = time;

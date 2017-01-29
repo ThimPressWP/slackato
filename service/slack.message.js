@@ -1,12 +1,13 @@
-'use strict';
+"use strict";
 
 const timeHelper = global.helpers.time;
 
 module.exports.verifySuccess = (item) => {
     return {
-        response_type: 'in_channel',
+        response_type: "in_channel",
         "attachments": [
             {
+                "fallback": item.name,
                 "color": "#36a64f",
                 "title": item.name,
                 "title_link": item.url,
@@ -33,10 +34,11 @@ module.exports.verifySuccess = (item) => {
 
 module.exports.error = (text) => {
     return {
-        response_type: 'in_channel',
-        'text': text,
+        response_type: "in_channel",
         "attachments": [
             {
+                "text": text,
+                "fallback": text,
                 "color": "#ff9800",
                 "footer": "<http://slackato.com|Slackato>",
                 "ts": timeHelper.getNowTimestamp()
@@ -47,9 +49,10 @@ module.exports.error = (text) => {
 
 module.exports.info = (text) => {
     return {
-        'text': text,
         "attachments": [
             {
+                "text": text,
+                "fallback": text,
                 "color": "#9e9e9e",
                 "footer": "<http://slackato.com|Slackato>",
                 "ts": timeHelper.getNowTimestamp()
