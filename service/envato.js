@@ -1,6 +1,8 @@
 'use strict';
 
 const request = require('request');
+const Mongoose = require('mongoose');
+const Team = Mongoose.model('Team');
 
 let client_id = process.env.ENVATO_APP_ID;
 let client_key = process.env.ENVATO_APP_KEY;
@@ -64,7 +66,7 @@ function getAccessToken(refresh_token) {
     return deferred.promise;
 }
 
-function requestApi(args, access_token, refresh_token) {
+function requestApi(args, access_token, refresh_token, teamID) {
     console.log('Request api', args.url, access_token, refresh_token);
 
     let deferred = Promise.defer();
@@ -81,6 +83,14 @@ function requestApi(args, access_token, refresh_token) {
                         .then(
                             new_access_token => {
                                 console.log(`New access token ${new_access_token}`);
+
+                                // Update new access token
+                                Team.saveEnvatoTokenByTeamID(teamID, {refresh_token, access_token: new_access_token})
+                                    .then(
+                                        save => {
+                                            console.log('Update new access token', save);
+                                        }
+                                    );
 
                                 return _request(args, new_access_token);
                             }
@@ -148,8 +158,10 @@ module.exports.getToken = (code) => {
     return deferred.promise;
 };
 
-module.exports.getSaleByCode = (code, token) => {
+module.exports.getSaleByCode = (code, team) => {
     let deferred = Promise.defer();
+    let token = team.envato_token;
+    let teamID = team.team_id;
 
     console.log(`Get sale by code: ${code} with token\n`, token);
 
@@ -158,7 +170,7 @@ module.exports.getSaleByCode = (code, token) => {
 
     requestApi({
         url: `https://api.envato.com/v3/market/author/sale?code=${code}`
-    }, access_token, refresh_token)
+    }, access_token, refresh_token, teamID)
         .then(
             response => {
                 console.info('Purchase code exist');

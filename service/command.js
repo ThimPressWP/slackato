@@ -25,7 +25,7 @@ function verify(teamID, code) {
 
                 console.log('Team exist');
 
-                return envatoSrv.getSaleByCode(code, team.envato_token);
+                return envatoSrv.getSaleByCode(code, team);
             }
         )
         .then(

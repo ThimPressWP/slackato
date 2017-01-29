@@ -50,7 +50,7 @@ module.exports.preHandleCommand = function (request, response, next) {
 };
 
 
-module.exports.handleCommand = function (req, res) {
+module.exports.handleCommand = function (req, res, next) {
     if (!req.command.name) {
         return;
     }
@@ -75,7 +75,7 @@ module.exports.handleCommand = function (req, res) {
         )
         .then(
             response => {
-                console.log('Send to hook: ', response);
+                console.log('Send to hook:', response);
             }
         )
         .catch(
@@ -83,4 +83,6 @@ module.exports.handleCommand = function (req, res) {
                 console.log(error);
             }
         );
+
+    next();
 };
