@@ -1,6 +1,7 @@
 "use strict";
 
 const timeHelper = global.helpers.time;
+const host = process.env.HOST;
 
 module.exports.verifySuccess = (item) => {
     return {
@@ -25,7 +26,7 @@ module.exports.verifySuccess = (item) => {
                         "value": item.license,
                     }
                 ],
-                "footer": "<http://slackato.com|Slackato>",
+                "footer": `<${host}|Slackato>`,
                 "ts": timeHelper.getNowTimestamp()
             }
         ]
@@ -40,7 +41,7 @@ module.exports.error = (text) => {
                 "text": text,
                 "fallback": text,
                 "color": "#ff9800",
-                "footer": "<http://slackato.com|Slackato>",
+                "footer": `<${host}|Slackato>`,
                 "ts": timeHelper.getNowTimestamp()
             }
         ]
@@ -54,7 +55,7 @@ module.exports.info = (text) => {
                 "text": text,
                 "fallback": text,
                 "color": "#9e9e9e",
-                "footer": "<http://slackato.com|Slackato>",
+                "footer": `<${host}|Slackato>`,
                 "ts": timeHelper.getNowTimestamp()
             }
         ]
