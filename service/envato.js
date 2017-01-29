@@ -175,8 +175,6 @@ module.exports.getSaleByCode = (code, team) => {
             response => {
                 console.info('Purchase code exist');
 
-                console.log(response);
-
                 return deferred.resolve({
                     name: response.item.name,
                     url: response.item.url,
