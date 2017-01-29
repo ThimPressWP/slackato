@@ -87,7 +87,7 @@ function requestApi(args, access_token, refresh_token) {
                         );
                 }
 
-                return Promise.reject(response.error_description);
+                return Promise.reject(response.description);
             }
         )
         .then(
@@ -158,6 +158,8 @@ module.exports.getSaleByCode = (code, token) => {
         .then(
             response => {
                 console.info('Purchase code exist');
+
+                console.log(response);
 
                 return deferred.resolve({
                     name: response.item.name,

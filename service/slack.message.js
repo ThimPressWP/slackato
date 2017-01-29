@@ -25,7 +25,7 @@ module.exports.verifySuccess = (item) => {
                     }
                 ],
                 "footer": "<http://slackato.com|Slackato>",
-                "ts": (new Date()).getTime()
+                "ts": timeHelper.getNowTimestamp()
             }
         ]
     };
@@ -39,7 +39,7 @@ module.exports.error = (text) => {
             {
                 "color": "#ff9800",
                 "footer": "<http://slackato.com|Slackato>",
-                "ts": (new Date()).getTime()
+                "ts": timeHelper.getNowTimestamp()
             }
         ]
     };
@@ -52,7 +52,7 @@ module.exports.info = (text) => {
             {
                 "color": "#9e9e9e",
                 "footer": "<http://slackato.com|Slackato>",
-                "ts": (new Date()).getTime()
+                "ts": timeHelper.getNowTimestamp()
             }
         ]
     };

@@ -74,10 +74,6 @@ module.exports.handle = (postData) => {
             return verify(teamID, parsing.value);
             break;
 
-        case 'help':
-            return help();
-            break;
-
         default:
             deferred.reject('Command not found. Type `/slackato help` to see detail commands');
             break;
