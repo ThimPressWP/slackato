@@ -6,19 +6,48 @@ const hookSrv = require('../service/slack.hook');
 
 const commandHelper = global.helpers.command;
 
-
-module.exports.handleCommand = function (req, res) {
-    let postData = req.body;
+module.exports.preHandleCommand = function (request, response, next) {
+    let postData = request.body;
     let commandText = postData.text || '';
+
+    //Set default command
+    request.command = 'hello';
 
     let parsing = commandHelper.parseCommandText(commandText);
     if (!parsing) {
-        return res.send("Hi! I am *Slackato* :)\nType `/slackato help` to see detail commands");
+        return response.send("Hi! I am *Slackato* :)\nType `/slackato help` to see detail commands");
     }
 
-    let response_url = postData.response_url || false;
+    request.command = parsing.name;
 
-    res.send('Waiting...');
+    let responseText = '';
+    switch (parsing.name) {
+        case 'verify':
+            responseText = `Searching for \`${parsing.value}\``;
+            break;
+
+        case 'help':
+            responseText = "*Guidelines*\n" +
+                "- Verify purchase code:\n`/slackato verify purchase-code-abc-xyz`";
+            break;
+
+        default:
+            responseText = 'Command not found. Type `/slackato help` to see detail commands';
+            break;
+    }
+
+    response.send({
+        response_type: 'in_channel',
+        text: responseText
+    });
+
+    next();
+};
+
+
+module.exports.handleCommand = function (req, res) {
+    let postData = req.body;
+    let response_url = postData.response_url || false;
 
     commandSrv.handle(postData)
         .then(

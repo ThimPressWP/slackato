@@ -3,7 +3,6 @@
 module.exports.verifySuccess = (item) => {
     return {
         response_type: 'in_channel',
-        text: 'Result for `' + item.purchase_code + '`',
         "attachments": [
             {
                 "color": "#36a64f",
