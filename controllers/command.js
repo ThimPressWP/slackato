@@ -11,14 +11,14 @@ module.exports.preHandleCommand = function (request, response, next) {
     let commandText = postData.text || '';
 
     //Set default command
-    request.command = 'hello';
+    request.command = {name: false, value: false};
 
     let parsing = commandHelper.parseCommandText(commandText);
     if (!parsing) {
         return response.send("Hi! I am *Slackato* :)\nType `/slackato help` to see detail commands");
     }
 
-    request.command = parsing.name;
+    request.command = parsing;
 
     let responseText = '';
     switch (parsing.name) {
@@ -46,6 +46,10 @@ module.exports.preHandleCommand = function (request, response, next) {
 
 
 module.exports.handleCommand = function (req, res) {
+    if (!req.command.name) {
+        return;
+    }
+
     let postData = req.body;
     let response_url = postData.response_url || false;
 
@@ -59,7 +63,7 @@ module.exports.handleCommand = function (req, res) {
         )
         .then(
             response => {
-                console.log(response);
+                console.log('Send to hook: ', response);
             }
         )
         .catch(
