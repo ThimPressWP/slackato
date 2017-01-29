@@ -1,5 +1,7 @@
 'use strict';
 
+const timeHelper = global.helpers.time;
+
 module.exports.verifySuccess = (item) => {
     return {
         response_type: 'in_channel',
@@ -18,12 +20,11 @@ module.exports.verifySuccess = (item) => {
                         "value": item.license,
                     },
                     {
-                        "title": "Supported Until",
-                        "value": item.supported_until,
+                        "title": "Remaining time",
+                        "value": timeHelper.remainingTime(item.supported_until),
                     }
                 ],
                 "footer": "<http://slackato.com|Slackato>",
-                "footer_icon": "https://a41e2ef2.ngrok.io/assets/images/logo.png",
                 "ts": (new Date()).getTime()
             }
         ]
@@ -38,7 +39,6 @@ module.exports.error = (text) => {
             {
                 "color": "#ff9800",
                 "footer": "<http://slackato.com|Slackato>",
-                "footer_icon": "https://a41e2ef2.ngrok.io/assets/images/logo.png",
                 "ts": (new Date()).getTime()
             }
         ]
@@ -52,7 +52,6 @@ module.exports.info = (text) => {
             {
                 "color": "#9e9e9e",
                 "footer": "<http://slackato.com|Slackato>",
-                "footer_icon": "https://a41e2ef2.ngrok.io/assets/images/logo.png",
                 "ts": (new Date()).getTime()
             }
         ]
