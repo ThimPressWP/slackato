@@ -293,6 +293,15 @@ header {
   -o-background-size: cover;
 }
 
+.t-brand {
+    color: #fff;
+    font-size: 28px;
+}
+
+.t-brand:hover {
+    color: #eee;
+}
+
 .header-info {
   position: absolute;
   bottom: 0;
@@ -301,6 +310,11 @@ header {
   right: 0;
   margin-left: 0px;
   margin-bottom: 12%;
+}
+
+.inverse {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
 }
 
 .signin {
