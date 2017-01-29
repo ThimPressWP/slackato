@@ -28,7 +28,12 @@ module.exports.preHandleCommand = function (request, response, next) {
 
         case 'help':
             responseText = "*Guidelines*\n" +
-                "- Verify purchase code:\n`/slackato verify purchase-code-abc-xyz`";
+                "- Verify purchase code:`/slackato verify purchase-code-abc-xyz`" +
+                "\n- Send your feedback: `/slackato feedback example content`";
+            break;
+
+        case 'feedback':
+            responseText = "Thank you for your feedback!  It helps the team understand which features and functionality are most important to you :)";
             break;
 
         default:

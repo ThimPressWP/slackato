@@ -46,13 +46,8 @@ function verify(teamID, code) {
     return deferred.promise;
 }
 
-function help() {
-    let deferred = Promise.defer();
-
-    deferred.resolve("*Guidelines*\n" +
-        "- Verify purchase code:\n`/slackato verify purchase-code-abc-xyz`");
-
-    return deferred.promise;
+function sendFeedback(content) {
+    console.log(content);
 }
 
 module.exports.handle = (teamID, command) => {
@@ -63,8 +58,8 @@ module.exports.handle = (teamID, command) => {
             return verify(teamID, command.value);
             break;
 
-        default:
-            deferred.reject('Command not found. Type `/slackato help` to see detail commands');
+        case 'feedback':
+            sendFeedback(command.value);
             break;
     }
 
