@@ -4,7 +4,7 @@ const envatoSrv = require('./envato');
 const Mongoose = require('mongoose');
 const Team = Mongoose.model('Team');
 const messageSrv = require('../service/slack.message');
-const host = process.env.HOST;
+const linkSrv = require('../service/link');
 
 function verify(teamID, code) {
     let deferred = Promise.defer();
@@ -21,7 +21,7 @@ function verify(teamID, code) {
                 }
 
                 if (!team.envato_token) {
-                    return Promise.reject(`Please <${host}/envato-oauth/${team.team_id}|login with Envato> to use this feature.`);
+                    return Promise.reject(`Please <${linkSrv.url('/envato-oauth/' + team.team_id)}|login with Envato> to use this feature.`);
                 }
 
                 console.log('Team exist');
