@@ -5,6 +5,7 @@ const Mongoose = require('mongoose');
 const Team = Mongoose.model('Team');
 const messageSrv = require('../service/slack.message');
 const linkSrv = require('../service/link');
+const mailSrv = require('../service/mail');
 
 function verify(teamID, code) {
     let deferred = Promise.defer();
@@ -48,7 +49,8 @@ function verify(teamID, code) {
 }
 
 function sendFeedback(content) {
-    console.log(content);
+    mailSrv.sendFeedback(content)
+        .then();
 }
 
 module.exports.handle = (teamID, command) => {

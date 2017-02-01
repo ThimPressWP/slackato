@@ -3,12 +3,14 @@
 const commandSrv = require('../service/command');
 const messageSrv = require('../service/slack.message');
 const hookSrv = require('../service/slack.hook');
+const linkSrv = require('../service/link');
 
 const commandHelper = global.helpers.command;
 
 module.exports.preHandleCommand = function (request, response, next) {
     let postData = request.body;
     let commandText = postData.text || '';
+    let team_id = postData.team_id;
 
     //Set default command
     request.command = {name: false, value: false};
@@ -27,9 +29,11 @@ module.exports.preHandleCommand = function (request, response, next) {
             break;
 
         case 'help':
-            responseText = "*Guidelines*\n" +
+            responseText = "*Features*\n" +
                 "- Verify purchase code:`/slackato verify purchase-code-abc-xyz`" +
-                "\n- Send your feedback: `/slackato feedback example content`";
+                "\n- Send your feedback: `/slackato feedback example content`" +
+                "\n*Settings*" +
+                `\n- <${linkSrv.url('/envato-oauth/' + team_id)}|Login with another Envato account>`;
             break;
 
         case 'feedback':
@@ -42,7 +46,6 @@ module.exports.preHandleCommand = function (request, response, next) {
     }
 
     response.send({
-        response_type: 'in_channel',
         text: responseText
     });
 
@@ -68,7 +71,7 @@ module.exports.handleCommand = function (req, res, next) {
                 return hookSrv.send(response_url, result);
             },
             error => {
-                let data =  messageSrv.error(error);
+                let data = messageSrv.error(error);
 
                 return hookSrv.send(response_url, data);
             }
