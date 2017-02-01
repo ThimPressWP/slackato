@@ -13,16 +13,12 @@ const send = (args) => {
             personalizations: [
                 {
                     to: [
-                        {
-                            email: args.to,
-                        },
+                        args.to,
                     ],
                     subject: args.subject
                 },
             ],
-            from: {
-                email: args.from
-            },
+            from: args.from,
             content: [
                 {
                     type: 'text/html',
@@ -45,8 +41,14 @@ const send = (args) => {
 
 module.exports.sendFeedback = (content) => {
     let args = {
-        from: 'tutv@foobla.com',
-        to: 'tutv95@gmail.com',
+        from: {
+            email: 'slackato@thimpress.com',
+            name: 'Slackato',
+        },
+        to: {
+            email: 'tutv95@gmail.com',
+            name: 'Max'
+        },
         subject: 'Feedback from slackato',
         content: content + "<hr><br>-- Slackato --"
     };
