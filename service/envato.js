@@ -83,7 +83,7 @@ function requestApi(args, access_token, refresh_token, teamID) {
 
                 let message = 'Something went wrong! Please install app try again!';
                 if (response.description) {
-                    message = message.description;
+                    message = response.description;
                 }
 
                 if (response.Message) {
