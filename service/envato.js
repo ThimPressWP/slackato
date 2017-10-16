@@ -69,32 +69,16 @@ function getAccessToken(refresh_token) {
 function requestApi(args, access_token, refresh_token, teamID) {
     console.log('Request api', args.url, access_token, refresh_token);
 
-    let deferred = Promise.defer();
+    return getAccessToken(refresh_token)
+        .then(access_token_ => {
+            console.log(`New access token ${access_token_}`);
 
-    _request(args, access_token)
+            return _request(args, access_token_);
+        })
         .then(
             function (response) {
                 if (response.item) {
                     return Promise.resolve(response);
-                }
-
-                if (response.error && response.error == 'forbidden') {
-                    return getAccessToken(refresh_token)
-                        .then(
-                            new_access_token => {
-                                console.log(`New access token ${new_access_token}`);
-
-                                // Update new access token
-                                Team.saveEnvatoTokenByTeamID(teamID, {refresh_token, access_token: new_access_token})
-                                    .then(
-                                        save => {
-                                            console.log('Update new access token', save);
-                                        }
-                                    );
-
-                                return _request(args, new_access_token);
-                            }
-                        );
                 }
 
                 let message = 'Something went wrong! Please install app try again!';
@@ -112,19 +96,17 @@ function requestApi(args, access_token, refresh_token, teamID) {
         .then(
             response => {
                 if (response.error) {
-                    return deferred.reject(response.description);
+                    return Promise.reject(response.description);
                 }
 
-                return deferred.resolve(response);
+                return Promise.resolve(response);
             }
         )
         .catch(
             message => {
-                return deferred.reject(message);
+                return Promise.reject(message);
             }
         );
-
-    return deferred.promise;
 }
 
 module.exports.getUrlAuth = () => {
@@ -168,7 +150,6 @@ module.exports.getToken = (code) => {
 };
 
 module.exports.getSaleByCode = (code, team) => {
-    let deferred = Promise.defer();
     let token = team.envato_token;
     let teamID = team.team_id;
 
@@ -177,14 +158,14 @@ module.exports.getSaleByCode = (code, team) => {
     let access_token = token.access_token;
     let refresh_token = token.refresh_token;
 
-    requestApi({
+    return requestApi({
         url: `https://api.envato.com/v3/market/author/sale?code=${code}`
     }, access_token, refresh_token, teamID)
         .then(
             response => {
                 console.info('Purchase code exist');
 
-                return deferred.resolve({
+                return Promise.resolve({
                     name: response.item.name,
                     url: response.item.url,
                     license: response.license,
@@ -194,12 +175,5 @@ module.exports.getSaleByCode = (code, team) => {
                     purchase_count: response.purchase_count
                 });
             }
-        )
-        .catch(
-            error => {
-                deferred.reject(error);
-            }
         );
-
-    return deferred.promise;
 };

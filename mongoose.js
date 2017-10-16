@@ -9,7 +9,9 @@ module.exports = function () {
     Mongoose.Promise = global.Promise;
 
     let uri = process.env.APP_DB || 'mongodb://localhost/slackato';
-    Mongoose.connect(uri, function (error) {
+    Mongoose.connect(uri, {
+        useMongoClient: true
+    }, function (error) {
         if (error) {
             console.log(error);
             throw error;

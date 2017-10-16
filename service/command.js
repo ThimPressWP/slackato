@@ -12,9 +12,10 @@ function verify(teamID, code) {
 
     console.log('Verify purchase code:', code);
 
-    Team.findOne({
-        team_id: teamID
-    })
+    Team
+        .findOne({
+            team_id: teamID
+        })
         .then(
             team => {
                 if (!team) {
