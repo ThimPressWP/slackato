@@ -7,7 +7,7 @@ const MailServices = require('../services/MailServices');
 function verify(teamID, code) {
     return Team
         .findOne({
-            team_id: teamID
+            teamID: teamID
         })
         .then(team => {
             if (!team) {
