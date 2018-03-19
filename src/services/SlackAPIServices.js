@@ -9,6 +9,8 @@ exports.getAccessToken = (code) => {
         redirect_uri: getEnv('/host') + '/oauth',
     };
 
+    console.log(data);
+
     return request({
         uri: 'https://slack.com/api/oauth.access',
         method: 'POST',
