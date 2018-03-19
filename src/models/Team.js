@@ -17,7 +17,7 @@ const Team = new Schema({
         type: String,
         trim: true,
     },
-    envato_token: {
+    envatoToken: {
         type: Schema.Types.Mixed,
         default: false
     }

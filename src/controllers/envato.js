@@ -1,8 +1,7 @@
-const envatoSrv = require('../services/EnvatoServices');
-const Team = require('../models/Team');
+const EnvatoActions = require('../actions/EnvatoActions');
 
 exports.redirectAuth = (req, res) => {
-    const teamID = req.params.teamID || false;
+    const {teamID} = req.params;
 
     if (!teamID) {
         return res.redirect('/error.html');
@@ -13,40 +12,42 @@ exports.redirectAuth = (req, res) => {
      */
     req.session.teamID = teamID;
 
-    const url = envatoSrv.getUrlAuth();
-    res.redirect(url);
+    EnvatoActions.redirectAuth(teamID)
+        .then(url => {
+            res.redirect(url);
+        })
+        .catch((error) => {
+            console.error(error);
+
+            return res.redirect('/error.html');
+        });
 };
 
 exports.handleCallback = (req, res) => {
-    const error = req.query.error || false;
+    const {error, error_description, code} = req.query || false;
     if (error) {
-        const message = req.query.error_description || 'Access denied';
+        const message = error_description || 'Access denied';
+
         return res.send(message);
     }
-
-    const code = req.query.code || false;
 
     if (!code) {
         return res.redirect('/error.html');
     }
 
-    envatoSrv.getToken(code)
-        .then(
-            token => {
-                const teamID = req.session.teamID;
+    const {teamID} = req.session;
 
-                return Team.saveEnvatoTokenByTeamID(teamID, token);
-            }
-        )
-        .then(
-            message => {
-                res.redirect('/done.html');
-            }
-        )
-        .catch(
-            error => {
-                console.error(error);
-                res.redirect('/error.html');
-            }
-        );
+    if (!teamID) {
+        return res.send('Session is expired.');
+    }
+
+    return EnvatoActions.callback(teamID, code)
+        .then(() => {
+            return res.redirect('/done.html');
+        })
+        .catch(error => {
+            console.error(error);
+
+            return res.redirect('/error.html');
+        });
 };
