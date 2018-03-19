@@ -12,7 +12,7 @@ exports.getAccessToken = (code) => {
     return request({
         uri: 'https://slack.com/api/oauth.access',
         method: 'POST',
-        body: data,
+        form: data,
         json: true
     }).then(result => {
         const {ok, error} = result;
