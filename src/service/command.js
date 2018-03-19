@@ -3,9 +3,9 @@
 const envatoSrv = require('./envato');
 const Mongoose = require('mongoose');
 const Team = Mongoose.model('Team');
-const messageSrv = require('../service/slack.message');
-const linkSrv = require('../service/link');
-const mailSrv = require('../service/mail');
+const messageSrv = require('./slack.message');
+const linkSrv = require('./link');
+const mailSrv = require('./mail');
 
 function verify(teamID, code) {
     let deferred = Promise.defer();

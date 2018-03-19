@@ -1,9 +1,8 @@
-'use strict';
-
 const Mongoose = require('mongoose');
 const Schema = Mongoose.Schema;
+const conn = require('../app.database');
 
-let Team = new Schema({
+const Team = new Schema({
     access_token: {
         type: String,
         trim: true,
@@ -57,4 +56,4 @@ Team.statics.saveEnvatoTokenByTeamID = function (teamID, token) {
     return deferred.promise;
 };
 
-Mongoose.model('Team', Team);
+module.exports = conn.model('Team', Team);

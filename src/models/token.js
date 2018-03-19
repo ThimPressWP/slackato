@@ -1,9 +1,8 @@
-'use strict';
-
 const Mongoose = require('mongoose');
 const Schema = Mongoose.Schema;
+const conn = require('../app.database');
 
-let Token = new Schema({
+const Token = new Schema({
     access_token: {
         type: String,
         trim: true,
@@ -18,4 +17,4 @@ let Token = new Schema({
     }
 });
 
-Mongoose.model('Token', Token);
+module.exports = conn.model('Token', Token);
