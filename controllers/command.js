@@ -1,5 +1,3 @@
-'use strict';
-
 const commandSrv = require('../service/command');
 const messageSrv = require('../service/slack.message');
 const hookSrv = require('../service/slack.hook');

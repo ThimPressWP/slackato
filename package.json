@@ -5,23 +5,24 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.js",
+    "_upgrade": "ncu --upgrade --upgradeAll && yarn install && yarn upgrade"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.15.2",
-    "dotenv": "^2.0.0",
-    "express": "^4.14.0",
-    "express-session": "^1.14.2",
-    "glob": "^7.1.1",
-    "moment": "^2.17.1",
-    "mongoose": "^4.7.4",
-    "q": "^1.4.1",
-    "request": "^2.79.0",
-    "request-promise": "^4.1.1",
-    "sendgrid": "^4.7.1",
-    "slack-api": "^0.1.12"
+    "body-parser": "^1.18.2",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "glob": "^7.1.2",
+    "moment": "^2.21.0",
+    "mongoose": "^5.0.10",
+    "q": "^1.5.1",
+    "request": "^2.85.0",
+    "request-promise": "^4.2.2",
+    "sendgrid": "^5.2.3",
+    "slack-api": "^0.1.14"
   }
 }

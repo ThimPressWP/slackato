@@ -1,5 +1,3 @@
-'use strict';
-
 let slackSrv = require('../service/slack.api');
 const Mongoose = require('mongoose');
 const Team = Mongoose.model('Team');

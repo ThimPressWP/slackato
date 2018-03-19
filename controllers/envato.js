@@ -1,5 +1,3 @@
-'use strict';
-
 const envatoSrv = require('../service/envato');
 const Mongoose = require('mongoose');
 const Team = Mongoose.model('Team');

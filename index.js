@@ -1,5 +1,3 @@
-'use strict';
-
 require('dotenv').config();
 require('./helpers');
 
