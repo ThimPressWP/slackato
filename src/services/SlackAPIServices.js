@@ -21,6 +21,14 @@ exports.getAccessToken = (code) => {
             throw new Error(error);
         }
 
-        return Promise.resolve(result);
+        const {access_token, scope, user_id, team_name, team_id} = result;
+
+        return Promise.resolve({
+            access_token,
+            scope,
+            user_id,
+            team_name,
+            team_id
+        });
     });
 };
