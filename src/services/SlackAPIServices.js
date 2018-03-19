@@ -1,36 +1,32 @@
-'use strict';
+const request = require('request-promise');
+const getEnv = require('../helpers/getEnv');
 
-const request = require('request');
-const q = require('q');
-
-module.exports.getToken = function (code) {
-    let deferred = q.defer();
-
-    let data = {
-        client_id: process.env.APP_CLIENT_ID || '',
-        client_secret: process.env.APP_CLIENT_SECRET || '',
+module.exports.getToken = (code) => {
+    const data = {
+        client_id: getEnv('/slack/appID'),
+        client_secret: getEnv('/slack/appKey'),
         code: code,
-        redirect_uri: process.env.HOST + '/oauth',
+        redirect_uri: getEnv('/host') + '/oauth',
     };
 
-    request.post('https://slack.com/api/oauth.access', {form: data}, (error, response, body) => {
-        if (error) {
-            deferred.reject(error);
-        }
-
+    return request({
+        uri: 'https://slack.com/api/oauth.access',
+        method: 'POST',
+        form: data,
+    }).then(result => {
         try {
-            let object = JSON.parse(body);
-            let ok = object.ok || false;
+            const object = JSON.parse(result);
+            const ok = object.ok || false;
+
             if (!ok) {
-                deferred.reject(object);
-            } else {
-                deferred.resolve(object);
+                return Promise.reject(object);
             }
 
+            return Promise.resolve(object);
         } catch (e) {
-            deferred.reject('Parse json error!');
+            console.error(e);
+
+            throw new Error('Parse json error!');
         }
     });
-
-    return deferred.promise;
 };
