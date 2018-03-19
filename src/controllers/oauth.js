@@ -9,9 +9,7 @@ exports.callback = (req, res) => {
 
     OathActions.callback(code)
         .then(team => {
-            const teamId = team.get('team_id');
-
-            return res.send(team);
+            const teamId = team.get('teamID');
 
             return res.redirect(`/envato-oauth/${teamId}`);
         })
