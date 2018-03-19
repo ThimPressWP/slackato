@@ -150,13 +150,12 @@ module.exports.getToken = (code) => {
 };
 
 module.exports.getSaleByCode = (code, team) => {
-    let token = team.envato_token;
-    let teamID = team.team_id;
+    const token = team.envato_token;
+    const {teamID} = team;
 
     console.log(`Get sale by code: ${code} with token\n`, token);
 
-    let access_token = token.access_token;
-    let refresh_token = token.refresh_token;
+    const {access_token, refresh_token} = token;
 
     return requestApi({
         url: `https://api.envato.com/v3/market/author/sale?code=${code}`

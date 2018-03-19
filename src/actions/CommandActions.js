@@ -15,7 +15,7 @@ function verify(teamID, code) {
             }
 
             if (!team.envato_token) {
-                return Promise.reject(`Please <${LinkServices.url('/envato-oauth/' + team.team_id)}|login with Envato> to use this feature.`);
+                return Promise.reject(`Please <${LinkServices.url('/envato-oauth/' + team.teamID)}|login with Envato> to use this feature.`);
             }
 
             console.log('Team exist');
