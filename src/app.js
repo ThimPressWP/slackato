@@ -1,6 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const getEnv = require('./helpers/getEnv');
 
 const app = express();
 
@@ -30,8 +31,7 @@ app.use(express.static(__dirname + '../public'));
  */
 app.use(require('./routes'));
 
-const port = process.env.HOST_PORT || 7878;
-
+const port = getEnv('/port');
 app.listen(port, () => {
     console.log('App listening on port ' + port);
 });

@@ -1,7 +1,7 @@
-const commandSrv = require('../service/command');
-const messageSrv = require('../service/slack.message');
-const hookSrv = require('../service/slack.hook');
-const linkSrv = require('../service/link');
+const commandSrv = require('../services/CommandServices');
+const messageSrv = require('../services/SlackMessageSerivces');
+const hookSrv = require('../services/SlackHookServices');
+const linkSrv = require('../services/LinkServices');
 
 const commandHelper = global.helpers.command;
 

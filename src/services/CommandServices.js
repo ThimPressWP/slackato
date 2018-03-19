@@ -1,11 +1,11 @@
 'use strict';
 
-const envatoSrv = require('./envato');
+const envatoSrv = require('./EnvatoServices');
 const Mongoose = require('mongoose');
 const Team = Mongoose.model('Team');
-const messageSrv = require('./slack.message');
-const linkSrv = require('./link');
-const mailSrv = require('./mail');
+const messageSrv = require('./SlackMessageSerivces');
+const linkSrv = require('./LinkServices');
+const mailSrv = require('./MailServices');
 
 function verify(teamID, code) {
     let deferred = Promise.defer();

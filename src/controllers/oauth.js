@@ -1,20 +1,18 @@
-let slackSrv = require('../service/slack.api');
-const Mongoose = require('mongoose');
-const Team = Mongoose.model('Team');
+const slackSrv = require('../services/SlackAPIServices');
+const Team = require('../models/Team');
 
-module.exports.callback = function (req, res, next) {
-    let error = req.query.error || false;
+exports.callback = (req, res) => {
+    const error = req.query.error || false;
     if (error) {
-        res.redirect('/denied.html');
-        return;
+        return res.redirect('/denied.html');
     }
 
-    let code = req.query.code || false;
+    const code = req.query.code || false;
     slackSrv.getToken(code)
         .then(
             response => {
                 console.log(response);
-                let newTeam = new Team(response);
+                const newTeam = new Team(response);
                 newTeam.save()
                     .then(
                         team => {

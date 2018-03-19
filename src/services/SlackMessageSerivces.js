@@ -1,5 +1,3 @@
-"use strict";
-
 const timeHelper = global.helpers.time;
 const host = process.env.HOST;
 

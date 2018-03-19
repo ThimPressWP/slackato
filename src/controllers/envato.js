@@ -1,9 +1,8 @@
-const envatoSrv = require('../service/envato');
-const Mongoose = require('mongoose');
-const Team = Mongoose.model('Team');
+const envatoSrv = require('../services/EnvatoServices');
+const Team = require('../models/Team');
 
-module.exports.redirectAuth = (req, res) => {
-    let teamID = req.params.teamID || false;
+exports.redirectAuth = (req, res) => {
+    const teamID = req.params.teamID || false;
 
     if (!teamID) {
         return res.redirect('/error.html');
@@ -14,18 +13,18 @@ module.exports.redirectAuth = (req, res) => {
      */
     req.session.teamID = teamID;
 
-    let url = envatoSrv.getUrlAuth();
+    const url = envatoSrv.getUrlAuth();
     res.redirect(url);
 };
 
-module.exports.handleCallback = (req, res) => {
-    let error = req.query.error || false;
+exports.handleCallback = (req, res) => {
+    const error = req.query.error || false;
     if (error) {
-        let message = req.query.error_description || 'Access denied';
+        const message = req.query.error_description || 'Access denied';
         return res.send(message);
     }
 
-    let code = req.query.code || false;
+    const code = req.query.code || false;
 
     if (!code) {
         return res.redirect('/error.html');
@@ -34,7 +33,7 @@ module.exports.handleCallback = (req, res) => {
     envatoSrv.getToken(code)
         .then(
             token => {
-                let teamID = req.session.teamID;
+                const teamID = req.session.teamID;
 
                 return Team.saveEnvatoTokenByTeamID(teamID, token);
             }
