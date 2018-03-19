@@ -1,75 +1,52 @@
-'use strict';
+const request = require('request-promise-native');
+const getEnv = require('../helpers/getEnv');
+const getUrl = require('../helpers/getUrl');
 
-const request = require('request');
-const Mongoose = require('mongoose');
-const Team = Mongoose.model('Team');
 
-let client_id = process.env.ENVATO_APP_ID;
-let client_key = process.env.ENVATO_APP_KEY;
-let redirect = process.env.HOST + '/envato';
+const client_id = getEnv('/envato/appID');
+const client_key = getEnv('/envato/appKey');
+const redirect = getUrl('/envato');
 
-function _request(args, access_token) {
-    let deferred = Promise.defer();
-
-    request({
-        url: args.url,
+const _request = (args, access_token) => {
+    return request({
+        uri: args.url,
         method: args.method || 'GET',
         form: args.data,
         headers: {
             "Authorization": `Bearer ${access_token}`
-        }
-    }, (error, response, body) => {
-        if (error) {
-            return deferred.reject(error.message);
-        }
-
-        try {
-            let object = JSON.parse(body);
-
-            return deferred.resolve(object);
-        } catch (e) {
-            deferred.reject('Parse json error!');
-        }
+        },
+        json: true
     });
+};
 
-    return deferred.promise;
-}
-
-function getAccessToken(refresh_token) {
-    let deferred = Promise.defer();
-
-    let data = {
+const _getAccessToken = (refresh_token) => {
+    const data = {
         grant_type: 'refresh_token',
         refresh_token: refresh_token,
         client_id: client_id,
         client_secret: client_key
     };
 
-    request.post('https://api.envato.com/token', {form: data}, (error, response, body) => {
+    return request({
+        uri: 'https://api.envato.com/token',
+        method: 'POST',
+        form: data,
+        json: true
+    }).then(result => {
+        const {error, error_description, access_token} = result;
+
         if (error) {
-            return deferred.reject(error);
+            return Promise.reject(error_description);
         }
 
-        try {
-            let object = JSON.parse(body);
-
-            if (object.error) {
-                return deferred.reject(object.error_description);
-            }
-
-            return deferred.resolve(object.access_token);
-        } catch (e) {
-            deferred.reject('Parse json error!');
-        }
+        return Promise.resolve(access_token);
     });
+};
 
-    return deferred.promise;
-}
-
-function requestApi(args, access_token, refresh_token, teamID) {
+const _requestAPI = (args, access_token, refresh_token, teamID) => {
     console.log('Request api', args.url, access_token, refresh_token);
 
-    return getAccessToken(refresh_token)
+    return _getAccessToken(refresh_token)
         .then(access_token_ => {
             console.log(`New access token ${access_token_}`);
 
@@ -107,49 +84,38 @@ function requestApi(args, access_token, refresh_token, teamID) {
                 return Promise.reject(message);
             }
         );
-}
+};
 
-module.exports.getUrlAuth = () => {
+exports.getUrlAuth = () => {
     return `https://api.envato.com/authorization?response_type=code&client_id=${client_id}&redirect_uri=${redirect}`;
 };
 
-module.exports.getToken = (code) => {
-    let deferred = Promise.defer();
-
-    let url = 'https://api.envato.com/token';
-
-    let data = {
+exports.getToken = (code) => {
+    const data = {
         grant_type: 'authorization_code',
         client_id: client_id,
         client_secret: client_key,
         code
     };
 
-    request.post(url, {form: data}, (error, response, body) => {
-        if (error) {
-            deferred.reject(error);
+    return request({
+        uri: 'https://api.envato.com/token',
+        method: 'POST',
+        form: data,
+        json: true
+    }).then(object => {
+        if (object.error) {
+            return Promise.resolve(object.error_description);
         }
 
-        try {
-            let object = JSON.parse(body);
+        delete object.token_type;
+        delete object.expires_in;
 
-            if (object.error) {
-                deferred.resolve(object.error_description);
-            }
-
-            delete object.token_type;
-            delete object.expires_in;
-
-            deferred.resolve(object);
-        } catch (e) {
-            deferred.reject('Parse json error!');
-        }
+        return Promise.resolve(object);
     });
-
-    return deferred.promise;
 };
 
-module.exports.getSaleByCode = (code, team) => {
+exports.getSaleByCode = (code, team) => {
     const token = team.envato_token;
     const {teamID} = team;
 
@@ -157,22 +123,20 @@ module.exports.getSaleByCode = (code, team) => {
 
     const {access_token, refresh_token} = token;
 
-    return requestApi({
+    return _requestAPI({
         url: `https://api.envato.com/v3/market/author/sale?code=${code}`
     }, access_token, refresh_token, teamID)
-        .then(
-            response => {
-                console.info('Purchase code exist');
+        .then(response => {
+            console.info('Purchase code exist');
 
-                return Promise.resolve({
-                    name: response.item.name,
-                    url: response.item.url,
-                    license: response.license,
-                    supported_until: response.supported_until,
-                    buyer: response.buyer,
-                    purchase_code: code,
-                    purchase_count: response.purchase_count
-                });
-            }
-        );
+            return Promise.resolve({
+                name: response.item.name,
+                url: response.item.url,
+                license: response.license,
+                supported_until: response.supported_until,
+                buyer: response.buyer,
+                purchase_code: code,
+                purchase_count: response.purchase_count
+            });
+        });
 };
