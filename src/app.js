@@ -32,6 +32,9 @@ app.use(express.static(__dirname + '/../public'));
 app.use(require('./routes'));
 
 const port = getEnv('/port');
+const host = getEnv('/host');
 app.listen(port, () => {
+    console.log('HOST:', host);
+
     console.log('App listening on port ' + port);
 });
