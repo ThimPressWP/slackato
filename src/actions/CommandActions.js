@@ -4,7 +4,7 @@ const SlackMessageServices = require('../services/SlackMessageServices');
 const LinkServices = require('../services/LinkServices');
 const MailServices = require('../services/MailServices');
 
-function verify(teamID, code) {
+const _verify = (teamID, code) => {
     return Team
         .findOne({
             teamID: teamID
@@ -23,7 +23,7 @@ function verify(teamID, code) {
             return envatoSrv.getSaleByCode(code, team);
         })
         .then(result => {
-            let post = SlackMessageServices.verifySuccess(result);
+            const post = SlackMessageServices.verifySuccess(result);
 
             return Promise.resolve(post);
         })
@@ -32,20 +32,20 @@ function verify(teamID, code) {
 
             return Promise.reject(error);
         });
-}
+};
 
-function sendFeedback(content) {
+const _sendFeedback = (content) => {
     MailServices.sendFeedback(content)
         .then();
-}
+};
 
 exports.handle = (teamID, command) => {
     switch (command.name) {
         case 'verify':
-            return verify(teamID, command.value);
+            return _verify(teamID, command.value);
 
         case 'feedback':
-            return sendFeedback(command.value);
+            return _sendFeedback(command.value);
     }
 
     return Promise.resolve(true);
