@@ -14,7 +14,7 @@ function verify(teamID, code) {
                 return Promise.reject('Team not found');
             }
 
-            if (!team.envato_token) {
+            if (!team.envatoToken) {
                 return Promise.reject(`Please <${LinkServices.url('/envato-oauth/' + team.teamID)}|login with Envato> to use this feature.`);
             }
 
