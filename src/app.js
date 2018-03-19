@@ -2,6 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const getEnv = require('./helpers/getEnv');
+const uuid = require('uuid/v4');
 
 const app = express();
 
@@ -12,12 +13,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('trust proxy', 1);
 app.use(session({
-    secret: 'hello',
-    resave: false,
-    saveUninitialized: true,
+    secret: '_5l2ck2tO__s3cr3t_',
     cookie: {
         secure: true,
         maxAge: 60000
+    },
+    genid: (req) => {
+        return uuid();
     }
 }));
 

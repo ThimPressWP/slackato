@@ -37,6 +37,8 @@ exports.handleCallback = (req, res) => {
 
     const {teamID} = req.session;
 
+    console.log(req.session);
+
     if (!teamID) {
         return res.send('Session is expired.');
     }
