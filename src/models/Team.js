@@ -30,18 +30,6 @@ const Team = new Schema({
     }
 });
 
-Team.pre('save', function (next) {
-    next();
-});
-
-Team.post('save', function (error, doc, next) {
-    if (error.name === 'MongoError' && error.code === 11000) {
-        next(doc);
-    } else {
-        next();
-    }
-});
-
 Team.statics.saveEnvatoTokenByTeamID = function (teamID, token) {
     let deferred = Promise.defer();
 

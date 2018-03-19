@@ -1,7 +1,7 @@
 const request = require('request-promise');
 const getEnv = require('../helpers/getEnv');
 
-module.exports.getToken = (code) => {
+exports.getAccessToken = (code) => {
     const data = {
         client_id: getEnv('/slack/appID'),
         client_secret: getEnv('/slack/appKey'),
