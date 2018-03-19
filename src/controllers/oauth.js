@@ -7,6 +7,8 @@ exports.callback = (req, res) => {
         return res.redirect('/denied.html');
     }
 
+    return res.send(code);
+
     OathActions.callback(code)
         .then(team => {
             const teamId = team.get('team_id');

@@ -18,7 +18,6 @@ const Team = new Schema({
     },
     team_id: {
         type: String,
-        unique: 'Team has already integrated!',
         index: true,
     },
     bot: {
@@ -29,19 +28,5 @@ const Team = new Schema({
         default: false
     }
 });
-
-Team.statics.saveEnvatoTokenByTeamID = function (teamID, token) {
-    let deferred = Promise.defer();
-
-    this.model('Team').findOneAndUpdate({team_id: teamID}, {$set: {envato_token: token}}, (error, old) => {
-        if (error) {
-            deferred.reject(error);
-        }
-
-        deferred.resolve(true);
-    });
-
-    return deferred.promise;
-};
 
 module.exports = conn.model('Team', Team);

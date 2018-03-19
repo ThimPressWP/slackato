@@ -2,8 +2,7 @@ const commandSrv = require('../services/CommandServices');
 const messageSrv = require('../services/SlackMessageSerivces');
 const hookSrv = require('../services/SlackHookServices');
 const linkSrv = require('../services/LinkServices');
-
-const commandHelper = global.helpers.command;
+const commandHelper = require('../helpers/command');
 
 module.exports.preHandleCommand = function (request, response, next) {
     let postData = request.body;

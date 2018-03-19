@@ -1,4 +1,4 @@
-const timeHelper = global.helpers.time;
+const timeHelper = require('../helpers/time');
 const host = process.env.HOST;
 
 module.exports.verifySuccess = (item) => {
