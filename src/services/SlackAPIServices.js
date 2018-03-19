@@ -1,4 +1,4 @@
-const request = require('request-promise');
+const request = require('request-promise-native');
 const getEnv = require('../helpers/getEnv');
 
 exports.getAccessToken = (code) => {
@@ -12,21 +12,15 @@ exports.getAccessToken = (code) => {
     return request({
         uri: 'https://slack.com/api/oauth.access',
         method: 'POST',
-        form: data,
+        body: data,
+        json: true
     }).then(result => {
-        try {
-            const object = JSON.parse(result);
-            const ok = object.ok || false;
+        const {ok, error} = result;
 
-            if (!ok) {
-                return Promise.reject(object);
-            }
-
-            return Promise.resolve(object);
-        } catch (e) {
-            console.error(e);
-
-            throw new Error('Parse json error!');
+        if (!ok) {
+            throw new Error(error);
         }
+
+        return Promise.resolve(result);
     });
 };
