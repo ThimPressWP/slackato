@@ -116,7 +116,7 @@ exports.getToken = (code) => {
 };
 
 exports.getSaleByCode = (code, team) => {
-    const token = team.envato_token;
+    const token = team.envatoToken;
     const {teamID} = team;
 
     console.log(`Get sale by code: ${code} with token\n`, token);
