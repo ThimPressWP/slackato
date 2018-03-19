@@ -12,9 +12,11 @@ exports.redirectAuth = (req, res) => {
      */
     req.session.teamID = teamID;
 
+    console.log(req.session.teamID);
+
     EnvatoActions.redirectAuth(teamID)
         .then(url => {
-            res.redirect(url);
+            return res.redirect(url);
         })
         .catch((error) => {
             console.error(error);
@@ -37,7 +39,7 @@ exports.handleCallback = (req, res) => {
 
     const {teamID} = req.session;
 
-    console.log(req.session);
+    console.log(req.session.teamID);
 
     if (!teamID) {
         return res.send('Session is expired.');
