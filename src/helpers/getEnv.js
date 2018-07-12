@@ -32,8 +32,8 @@ const data = {
     slack: {
         $filter: 'env',
         $default: {
-            appID: process.env.ENVATO_APP_ID || "",
-            appKey: process.env.ENVATO_APP_KEY || "",
+            appID: process.env.SLACK_APP_ID || "",
+            appKey: process.env.SLACK_APP_KEY || "",
         },
         production: {
             appID: process.env.SLACK_APP_ID || "",
