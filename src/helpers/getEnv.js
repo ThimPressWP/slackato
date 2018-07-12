@@ -10,7 +10,7 @@ const data = {
     host: {
         $filter: 'env',
         $default: "http://localhost:7878",
-        production: process.env.HOST || "https://slackato.marketify.co"
+        production: process.env.HOST || "https://slackato.thimpress.com"
     },
     mongodb: {
         $filter: "env",
