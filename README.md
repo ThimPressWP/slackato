@@ -2,6 +2,8 @@
 
 https://slackato.thimpress.com
 
+![Demo](/demo.png)
+
 ## 1. Prerequisites
 
 - [MongoDB](https://www.mongodb.org/downloads)
