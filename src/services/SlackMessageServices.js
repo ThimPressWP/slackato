@@ -1,5 +1,6 @@
 const timeHelper = require('../helpers/time');
-const host = process.env.HOST;
+const getEnv = require('../helpers/getEnv');
+const host = getEnv('/host');
 
 module.exports.verifySuccess = (item) => {
     return {
