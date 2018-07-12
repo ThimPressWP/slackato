@@ -5,5 +5,6 @@ module.exports.send = function (url, data) {
         method: 'POST',
         uri: url,
         from: data,
+        json: true
     });
 };
