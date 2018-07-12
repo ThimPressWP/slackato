@@ -1,18 +1,11 @@
-'use strict';
-
-const request = require('request');
+const request = require('request-promise-native');
 
 module.exports.send = function (url, data) {
-    let deferred = Promise.defer();
     data = JSON.stringify(data);
 
-    request.post(url, {form: data}, (error, response, body) => {
-        if (error) {
-            return deferred.reject(error);
-        }
-
-        return deferred.resolve(body);
+    return request({
+        method: 'POST',
+        uri: url,
+        from: data,
     });
-
-    return deferred.promise;
 };
