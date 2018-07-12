@@ -26,7 +26,7 @@ npm install || yarn
 
 - Copy file `example.env` and named it is `.env`.
 - Create a slack app (https://api.slack.com/apps) and a envato app (https://build.envato.com/)
-- Change file `.env` with app id and app key 2 apps just be created.
+- Change file `.env` with app id and app key of 2 apps just be created.
 
 ## 4. Run
 
