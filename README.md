@@ -39,3 +39,6 @@ NODE_ENV=production pm2 start index.js --name slackato
 Go to your site which is installed **Slackato** app and click to button `ADD TO SLACK`.
 
 ![Demo Slackato](/slackato.png)
+
+## License
+MIT © [Tu TV](https://github.com/tutv)
