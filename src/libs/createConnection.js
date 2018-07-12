@@ -22,8 +22,14 @@ module.exports = (uri, options = {}) => {
         });
     });
 
-    return Mongoose
+    const connection = Mongoose
         .createConnection(uri, options, () => {
             console.log('MongoDB is connected.');
         });
+
+    connection.on('error', (error) => {
+        console.error('MONGODB', error);
+    });
+
+    return connection;
 };
