@@ -2,12 +2,12 @@
 
 https://slackato.thimpress.com
 
-## Prerequisites
+## 1. Prerequisites
 
 - [MongoDB](https://www.mongodb.org/downloads)
 - [Node.js 6.0+](http://nodejs.org)
 
-## Getting Started
+## 2. Getting Started
 
 ```
 # Clone this project to your local.
@@ -20,13 +20,13 @@ cd slackato
 npm install || yarn
 ```
 
-## Configuration
+## 3. Configuration
 
 - Copy file `example.env` and named it is `.env`.
 - Create a slack app (https://api.slack.com/apps) and a envato app (https://build.envato.com/)
 - Change file `.env` with app id and app key 2 apps just be created.
 
-## Run
+## 4. Run
 
 - You can run by [PM2](http://pm2.keymetrics.io/) with command:
 
@@ -34,8 +34,8 @@ npm install || yarn
 NODE_ENV=production pm2 start index.js --name slackato
 ```
 
-## Add to slack
+## 5. Add to slack
 
-Go to your site which is installed *Slackato* app and click to button `ADD TO SLACK`.
+Go to your site which is installed **Slackato** app and click to button `ADD TO SLACK`.
 
 ![Demo Slackato](/slackato.png)
