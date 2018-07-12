@@ -4,7 +4,7 @@ module.exports.send = function (url, data) {
     return request({
         method: 'POST',
         uri: url,
-        from: data,
+        body: data,
         json: true
     });
 };
