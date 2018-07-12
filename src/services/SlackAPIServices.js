@@ -32,5 +32,9 @@ exports.getAccessToken = (code) => {
             team_name,
             team_id
         });
+    }).catch(error => {
+        console.log('ERROR: Slack get access token', error);
+
+        return Promise.reject(error);
     });
 };
